@@ -1,0 +1,7 @@
+Como utilizar o programa:
+
+Insira na linha de comando: python lexico.py
+Ao inserir, o programa irá requisitar uma string com o nome do código no qual você quer analisar.
+Junto ao programa há um código exemplo, para testes, nomeado teste.c
+
+Como saída, é liberada uma lista de tokens e uma tabela de simbolos
