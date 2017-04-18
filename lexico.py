@@ -3,7 +3,7 @@ import re
 #Listas de Tokens
 reservadas = ["char","int","float","if","else","for","while","return","continue","break","print","read"]
 identificador = []
-separador = [";",",","\n",".","\t","#","[","]","(",")","{","}"]
+separador = [" ",";",",","\n",".","\t","#","[","]","(",")","{","}"]
 operador = ["=","!","<",">","+","-","&","|","/","*","^"]
 escrita = []
 escritaTabela = []
@@ -103,14 +103,14 @@ def conferirOperadores(linha,coluna,codigo,i):
 	for j in range(0,len(operador)):
 		if operador[j]==codigo[i]:
 			if (j < 6)and(codigo[i+1]==operador[0]):
-				escrita.append("["+operador[j]+", ,"+str(lin)+","+str(col)+"]\n")
-				return i+2
+				ramo = "["+operador[j]+", ,"+str(lin)+","+str(col)+"]\n"
+				return i+2,ramo
 			if (j>3)and(j<8)and(codigo[i]==codigo[i+1]):
-				escrita.append("["+operador[j] + operador[j]+", ,"+str(lin)+","+str(col)+"]\n")
-				return i+2
+				ramo = "["+operador[j] + operador[j]+", ,"+str(lin)+","+str(col)+"]\n"
+				return i+2,ramo
 			else:
-				escrita.append("["+operador[j]+", ,"+str(lin)+","+str(col)+"]\n")
-				return i+1
+				ramo = "["+operador[j]+", ,"+str(lin)+","+str(col)+"]\n"
+				return i+1,ramo
 	return 0
 
 #define se eh palavra reservada e a printa
@@ -230,15 +230,19 @@ while i != len(codigo):
 	elif re.match(r"\/",codigo[i]) and re.match(r"\*",codigo[i+1]):
 		i,col,lin = catchComentarios2(lin,col,codigo,i)
 	elif conferirOperadores(lin,col,codigo,i) != 0:
-		i = conferirOperadores(lin,col,codigo,i)
+		i,ramo = conferirOperadores(lin,col,codigo,i)
+		escrita.append(ramo)
 		col = col +i -j
 	elif re.match(r"\"",codigo[i]):
 		i,col,lin = catchLiterais(lin,col,codigo,i)
 	elif re.match(r"\'",codigo[i]):
 		i,col,lin = catchLiterais2(lin,col,codigo,i)
-	else:
-		conferirSeparadores(lin,col,codigo[i])
+	elif conferirSeparadores(lin,col,codigo[i]):
 		i=i+1
+		col = col + 1
+	else: 
+		print "Erro - Simbolo desconhecido\nlinha: "+str(lin)+"\nColuna: "+str(col)+"\n"
+		i = i+1
 		col = col + 1
 	j = i
 	k = 0
@@ -259,11 +263,4 @@ while i < numLinhas:
 	i=i+1
 
 arq.writelines(escritaTabela)
-
-
-
-
-
-
-
 arq.close()
