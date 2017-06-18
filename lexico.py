@@ -3,11 +3,11 @@ import re
 #Listas de Tokens
 reservadas = ["char","int","float","if","else","for","while","return","continue","break","print","read"]
 identificador = []
-separador = [" ",";",",","\n",".","\t","#","[","]","(",")","{","}"]
+separador = [" ",";","\n",".","\t","#","[","]","(",")","{","}"]
 operador = ["=","!","<",">","+","-","&","|","/","*","^"]
 escrita = []
 escritaTabela = []
-#completa comentario tipo // 
+#completa comentario tipo //
 def catchComentarios(linha,coluna,codigo,i):
 	lit = " "
 	i = i+2
@@ -194,7 +194,7 @@ def separaNumero(linha,coluna,codigo,i):
 print("Digite o nome do arquivo de entrada do compilador")
 arquivoEntrada = raw_input()
 arq = open(arquivoEntrada, 'r')
-codigo = arq.read() 
+codigo = arq.read()
 arq.close()
 arq = open("TabelaSimbolos.txt",'w')
 arq2 = open("Tokens.txt",'w')
@@ -215,6 +215,10 @@ while i != len(codigo):
 		lin = lin +1
 		col = 0
 		i = i+1
+	elif codigo[i]==',':
+		col = col + 1
+		i = i + 1
+		escrita.append("[comma, ,"+str(lin)+","+str(col)+"]\n")
 	#Definir se e id ou Palavra reservada
 	elif re.match(r"[a-zA-Z_]",codigo[i]):
 		j = i
@@ -240,7 +244,7 @@ while i != len(codigo):
 	elif conferirSeparadores(lin,col,codigo[i]):
 		i=i+1
 		col = col + 1
-	else: 
+	else:
 		print "Erro - Simbolo desconhecido\nlinha: "+str(lin)+"\nColuna: "+str(col)+"\n"
 		i = i+1
 		col = col + 1
